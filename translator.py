@@ -15,7 +15,7 @@ from deep_translator import GoogleTranslator
 def translate():
     try:
         input_str = input_text.get("1.0", "end").strip()
-            
+        # 입력이 없으면 경고 메세지 띄우고 리턴    
         if not input_str:
             messagebox.showwarning("경고", "텍스트를 입력해주세요!")
             return
@@ -23,6 +23,7 @@ def translate():
             # 선택한 언어 코드 가져오기
         source_lang = languages[input_lang.get()]
         target_lang = languages[output_lang.get()]
+        # 입력 언어와 출력 언어과 같으면 경고 메시지 띄우고 리턴
         if source_lang == target_lang:
             messagebox.showinfo("알림", "원본 언어와 번역할 언어가 같아요!")
             return
@@ -48,6 +49,7 @@ def delete():
     input_text.delete(1.0, tk.END)
     output_text.delete(1.0, tk.END)
 
+# 객체 생성
 root = tk.Tk()
 root.title("다국어 번역기")
 root.geometry("620x630")
@@ -75,29 +77,28 @@ languages = {
 }
 
 
-
 tk.Label(root, text="입력 언어").place(x=30, y=20)
 
-# 입력 언어 콤보박스 
+# 입력 언어 콤보박스 생성
 input_lang = ttk.Combobox(root, values=list((languages.keys())), state="readonly", width=22)
 input_lang.place(x=130, y=20)
 input_lang.set("자동 감지")
 
 tk.Label(root, text="출력 언어").place(x=30, y=60)
 
-# 출력 언어 콤보박스
+# 출력 언어 콤보박스 생성
 output_lang = ttk.Combobox(root, values=list(languages.keys()), state="readonly", width=22)
 output_lang.place(x=130, y=60)
 output_lang.set("한국어")
 
 
-
 tk.Label(root, text="번역할 텍스트").place(x=30, y=110)
 
-# 번역을 할 문장을 입력하는 텍스트
+# 프레임 생성 및 배치
 input_frame = tk.Frame(root)
 input_frame.place(x=30, y=140)
 
+# 번역을 할 문장을 입력 텍스트
 input_text = tk.Text(
     input_frame,
     width=69,
@@ -106,7 +107,7 @@ input_text = tk.Text(
     wrap="word"
 )
 input_text.pack(side="left")
-
+# 입력창 스크롤바 생성 및 배치
 input_scroll = tk.Scrollbar(input_frame)
 input_scroll.pack(side="right", fill="y")
 
@@ -127,14 +128,14 @@ output_text = tk.Text(
 )
 output_text.pack(side="left")
 
+#출력창 스크롤바 생성 및 배치
 output_scroll = tk.Scrollbar(output_frame)
 output_scroll.pack(side="right", fill="y")
 
 output_text.config(yscrollcommand=output_scroll.set)
 output_scroll.config(command=output_text.yview)
 
-
-# 번역, 리셋 선택 버튼
+# 번역, 리셋 버튼
 btn1 = tk.Button(root, text="번역", width=10, height=1, command=translate)
 btn1.place(x=220, y=575)
 btn2 = tk.Button(root, text="리셋", width=10, height=1, command=delete)
