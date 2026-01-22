@@ -16,31 +16,32 @@ save_folder = ""
 # QR 코드 생성
 def generate_qr():
     global qr_pil_image
+    try:
+        url = input_text.get("1.0", "end").strip()
+        if not url:
+            messagebox.showerror("Error", "URL을 입력하세요!")
+            return
+        qr_color = color_combo.get()
 
-    url = input_text.get("1.0", "end").strip()
-    if not url:
-        messagebox.showerror("Error", "URL을 입력하세요!")
-        return
-    qr_color = color_combo.get()
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_H,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
 
-    qr = qrcode.QRCode(
-        version=1,
-        error_correction=qrcode.constants.ERROR_CORRECT_H,
-        box_size=10,
-        border=4,
-    )
-    qr.add_data(url)
-    qr.make(fit=True)
+        img = qr.make_image(fill_color=qr_color, back_color='white')
+        img = img.resize((200, 200), Image.LANCZOS)  # 수정된 부분
+        img_tk = ImageTk.PhotoImage(img)
 
-    img = qr.make_image(fill_color=qr_color, back_color='white')
-    img = img.resize((200, 200), Image.LANCZOS)  # 수정된 부분
-    img_tk = ImageTk.PhotoImage(img)
+        qr_image_label.config(image=img_tk)
+        qr_image_label.image = img_tk
 
-    qr_image_label.config(image=img_tk)
-    qr_image_label.image = img_tk
-
-    qr_pil_image = qr.make_image(fill_color=qr_color, back_color="white")
-
+        qr_pil_image = qr.make_image(fill_color=qr_color, back_color="white")
+    except Exception:
+        messagebox.showerror("오류", "생성 중 문제가 발생했습니다.")
 
 #QR 이미지 저장 
 def save_qr():
