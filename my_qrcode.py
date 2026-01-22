@@ -1,14 +1,21 @@
 # pip install qrcode
 # pip install pillow
 
+# pip install qrcode
+# pip install pillow
+
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
 import qrcode
 from PIL import Image, ImageTk
+from tkinter import filedialog
+import os
 
 qr_pil_image = None
+save_folder = ""
 
+# QR 코드 생성
 # QR 코드 생성
 def generate_qr():
     global qr_pil_image
@@ -37,29 +44,59 @@ def generate_qr():
 
     qr_pil_image = qr.make_image(fill_color=qr_color, back_color="white")
 
+
 #QR 이미지 저장 
 def save_qr():
     if qr_pil_image is None:
         messagebox.showwarning("경고", "먼저 QR 코드를 생성하세요!")
         return
 
-    filename = file_entry.get().strip()
-    filename = filename.replace(".png", "").replace(".jpg", "")
+    if not save_folder:
+        messagebox.showwarning("경고", "저장 경로를 선택하세요!")
+        return
 
+    filename = file_entry.get().strip()
     if not filename:
         messagebox.showwarning("경고", "파일명을 입력하세요!")
         return
+
+    # 확장자 제거
+    filename = filename.replace(".png", "").replace(".jpg", "")
+    file_type = file_combo.get()
+
+    # 저장 경로 생성
+    if file_type == "PNG":
+        save_path = os.path.join(save_folder, filename + ".png")
+    else:
+        save_path = os.path.join(save_folder, filename + ".jpg")
+
+    # 🔥 이미 파일이 존재하는지 확인
+    if os.path.exists(save_path):
+        overwrite = messagebox.askyesno(
+            "덮어쓰기 확인",
+            "같은 이름의 파일이 이미 존재합니다.\n덮어쓰시겠습니까?"
+        )
+        if not overwrite:
+            return  # 저장 취소
+
     try:
-        file_type = file_combo.get()
-
         if file_type == "PNG":
-            qr_pil_image.save(f"{filename}.png")
-        elif file_type == "JPG":
-            qr_pil_image.convert("RGB").save(f"{filename}.jpg")
+            qr_pil_image.save(save_path)
+        else:
+            qr_pil_image.convert("RGB").save(save_path)
 
-        messagebox.showinfo("완료", "QR 코드가 저장되었습니다!")
+        messagebox.showinfo("완료", f"QR 코드가 저장되었습니다!\n\n{save_path}")
+
     except Exception:
-        messagebox.showerror("오류", "QR 코드가 저장 실패")
+        messagebox.showerror("오류", "파일 저장 실패")
+    
+# 경로 선택
+def choose_save_path():
+    global save_folder
+    folder = filedialog.askdirectory()
+    if folder:
+        save_folder = folder
+        messagebox.showinfo("경로 선택", f"저장 경로:\n{folder}")
 
 # 텍스트 박스 지움
 def delete():
@@ -71,6 +108,12 @@ root.title("QR코드 생성기")
 root.geometry("560x600")
 root.resizable(False, False)
 
+# 마우스 우 클릭으로 복사
+def paste_on_right_click(event):
+    try:
+        input_text.insert(tk.INSERT, root.clipboard_get())
+    except tk.TclError:
+        pass
 
 
 name_label = tk.Label(root,text="나만의 QR 코드 만들기>>", fg="green")
@@ -90,8 +133,8 @@ close_btn.place(x=430, y=0)
 
 # 텍스트 입력창
 input_text = tk.Text(input_frame)
+input_text.bind("<Button-3>", paste_on_right_click)
 input_text.place(x=5, y=30, width=510, height=85)
-
 
 file_frame = tk.LabelFrame(root, text="저장할 QR코드 파일명 :", padx=10, pady=10)
 file_frame.place(x=10, y=200, width=540, height=60)
@@ -103,6 +146,8 @@ file_entry.place(x=5, y=5, width=510)
 example_label = tk.Label(root, text="* 파일명 예시) my_qr01", fg="gray")
 example_label.place(x=20, y=265)
 
+path_btn = tk.Button(root, text="경로 선택", width=10, command=choose_save_path)
+path_btn.place(x=360, y=265)
 save_btn = tk.Button(root, text="파일 저장", width=10, command=save_qr)
 save_btn.place(x=450, y=265)
 
@@ -126,6 +171,7 @@ delete_btn.place(x=430, y=320)
 
 tk.Label(root,text="QR 코드 색상 선택").place(x=300, y=375)
 
+# 색상 선택 콤보박스
 color_combo = ttk.Combobox(
     root,
     values=["black", "blue", "red", "green", "purple", "hotpink", "navy", "teal"],
@@ -137,6 +183,8 @@ color_combo.set("black")
 
 tk.Label(root, text="저장 형식").place(x=300, y=440)
 
+
+# 파일 형식 선택 콤보박스
 file_combo = ttk.Combobox(
     root,
     values=["PNG", "JPG"],
@@ -146,3 +194,5 @@ file_combo = ttk.Combobox(
 file_combo.place(x=300, y=465)
 file_combo.set("PNG")
 
+# 창 유지
+root.mainloop()
