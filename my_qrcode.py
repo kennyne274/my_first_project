@@ -13,7 +13,6 @@ qr_pil_image = None
 save_folder = ""
 
 # QR 코드 생성
-# QR 코드 생성
 def generate_qr():
     global qr_pil_image
     try:
@@ -68,7 +67,7 @@ def save_qr():
     else:
         save_path = os.path.join(save_folder, filename + ".jpg")
 
-    # 🔥 이미 파일이 존재하는지 확인
+    # 이미 파일이 존재하는지 확인
     if os.path.exists(save_path):
         overwrite = messagebox.askyesno(
             "덮어쓰기 확인",
@@ -177,25 +176,16 @@ delete_btn.place(x=430, y=320)
 
 
 # 색상 선택
+colors = ["black", "blue", "red", "green", "purple", "hotpink", "navy", "teal", "brown", "orange"]
 tk.Label(root,text="QR 코드 색상 선택").place(x=300, y=375)
-color_combo = ttk.Combobox(
-    root,
-    values=["black", "blue", "red", "green", "purple", "hotpink", "navy", "teal"],
-    state="readonly",
-    width=18
-)
+color_combo = ttk.Combobox(root, values=colors, state="readonly", width=18)
 color_combo.place(x=300, y=400)
 color_combo.set("black")
 
 # 파일 형식 선택
 tk.Label(root, text="저장 형식").place(x=300, y=440)
 
-file_combo = ttk.Combobox(
-    root,
-    values=["PNG", "JPG"],
-    state="readonly",
-    width=18
-)
+file_combo = ttk.Combobox(root, values=["PNG", "JPG"], state="readonly", width=18)
 file_combo.place(x=300, y=465)
 file_combo.set("PNG")
 
