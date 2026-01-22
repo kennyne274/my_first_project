@@ -1,9 +1,6 @@
 # pip install qrcode
 # pip install pillow
 
-# pip install qrcode
-# pip install pillow
-
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
@@ -115,6 +112,9 @@ def paste_on_right_click(event):
     except tk.TclError:
         pass
 
+# ===============================================================
+# 상단 위젯
+# ===============================================================
 
 name_label = tk.Label(root,text="나만의 QR 코드 만들기>>", fg="green")
 name_label.place(x=380, y=10)
@@ -151,6 +151,11 @@ path_btn.place(x=360, y=265)
 save_btn = tk.Button(root, text="파일 저장", width=10, command=save_qr)
 save_btn.place(x=450, y=265)
 
+
+# ===============================================================
+# 하단 위젯 
+# ===============================================================
+
 # qr 이미지 생성 프레임
 qr_frame = tk.LabelFrame(root, text="생성된 QR 코드", width=240, height=250)
 qr_frame.place(x=20, y=300)
@@ -169,9 +174,9 @@ generate_btn.place(x=300, y=320)
 delete_btn = tk.Button(root, text="지우기", width=13, command=delete)
 delete_btn.place(x=430, y=320)
 
-tk.Label(root,text="QR 코드 색상 선택").place(x=300, y=375)
 
-# 색상 선택 콤보박스
+# 색상 선택
+tk.Label(root,text="QR 코드 색상 선택").place(x=300, y=375)
 color_combo = ttk.Combobox(
     root,
     values=["black", "blue", "red", "green", "purple", "hotpink", "navy", "teal"],
@@ -181,10 +186,9 @@ color_combo = ttk.Combobox(
 color_combo.place(x=300, y=400)
 color_combo.set("black")
 
+# 파일 형식 선택
 tk.Label(root, text="저장 형식").place(x=300, y=440)
 
-
-# 파일 형식 선택 콤보박스
 file_combo = ttk.Combobox(
     root,
     values=["PNG", "JPG"],
@@ -194,5 +198,4 @@ file_combo = ttk.Combobox(
 file_combo.place(x=300, y=465)
 file_combo.set("PNG")
 
-# 창 유지
 root.mainloop()
