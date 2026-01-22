@@ -128,7 +128,7 @@ def word_cloud():
     root.resizable(False, False)
 
     # =========================
-    # 좌측 템플릿 영역
+    # 좌측 
     # =========================
     left_frame = tk.LabelFrame(root, text="원하는 마스크를 고르세요")
     left_frame.place(x=10, y=10, width=260, height=400)
@@ -157,7 +157,7 @@ def word_cloud():
     text.place(x=10, y=180)
 
     # =========================
-    # 우측 미리보기 영역
+    # 우측 미리보기 
     # =========================
     preview_frame = tk.LabelFrame(root, text="미리보기")
     preview_frame.place(x=280, y=10, width=520, height=400)
@@ -174,7 +174,7 @@ def word_cloud():
     preview_canvas.place(x=10, y=10)
 
     # =========================
-    # 하단 옵션 영역
+    # 하단
     # =========================
     option_frame = tk.Frame(root)
     option_frame.place(x=10, y=420, width=790, height=50)
@@ -223,7 +223,7 @@ def word_cloud():
 
 
     # =========================
-    # 버튼 영역
+    # 버튼 
     # =========================
     btn_frame = tk.Frame(root)
     btn_frame.place(x=430, y=470, width=370, height=40)
