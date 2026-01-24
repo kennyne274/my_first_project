@@ -113,10 +113,6 @@ def save_image():
 
     save_path = os.path.join(os.getcwd(), filename)
 
-    if os.path.exists(save_path):
-        if not messagebox.askyesno("확인", "이미 파일이 존재합니다. 덮어쓸까요?"):
-            return
-
     wc_image_original.save(save_path)
     messagebox.showinfo("완료", "원본 해상도로 저장되었습니다.")
 
