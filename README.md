@@ -19,4 +19,4 @@ Feel free to explore my repositories and give me any feedback — it's always we
 QR코드, 워드 크라우드 생성기, 데이터 분석기 등 작은 프로젝트들을 만들어 올리고 있어요.  
 아직 부족하지만 열심히 공부 중입니다. 😊
 
-!(screenshot.png)
+
