@@ -28,7 +28,7 @@ def generate_qr():
             error_correction=qrcode.constants.ERROR_CORRECT_H,
             box_size=10,
             border=4,
-        ).convert("RGBA")
+        )
 
         qr.add_data(url)
         qr.make(fit=True)
