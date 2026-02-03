@@ -44,7 +44,7 @@ def generate_qr():
         qr_image_label.config(image=img_tk)
         qr_image_label.image = img_tk # QR이미지 참조 유지
 
-    except Exception:
+    except Exception as e:
         messagebox.showerror("오류", f"생성 중 문제가 발생했습니다.{str(e)}")
 
 def add_logo(qr_img, logo_path):
@@ -110,7 +110,7 @@ def save_qr():
         )
         if not overwrite:
             return  # 저장 취소
-    # 파일 저장
+
     try:
         if file_type == "PNG":
             qr_pil_image.save(save_path)
@@ -134,11 +134,14 @@ def choose_save_path():
 def delete():
     global qr_pil_image, logo_path
 
+    # 입력값 초기화
     input_text.delete(1.0, tk.END)
-    
+
+    # QR 이미지 제거
     qr_image_label.config(image="")
     qr_image_label.image = None
 
+    # 내부 상태 초기화
     qr_pil_image = None
     logo_path = ""
 
@@ -179,7 +182,7 @@ input_text = tk.Text(input_frame)
 input_text.bind("<Button-3>", paste_on_right_click)
 input_text.place(x=5, y=30, width=510, height=85)
 
-file_frame = tk.LabelFrame(root, text="저장할 QR코드 파일명 :", padx=10, pady=10)
+file_frame = tk.LabelFrame(root, text="저장할 QR코드 파일명 입력 :", padx=10, pady=10)
 file_frame.place(x=10, y=200, width=540, height=60)
 
 file_entry = tk.Entry(file_frame)
@@ -219,6 +222,9 @@ generate_btn.place(x=300, y=320)
 delete_btn = tk.Button(root, text="지우기", width=13, command=delete)
 delete_btn.place(x=430, y=320)
 
+# 로고 선택
+logo_btn = tk.Button(root, text="로고 선택", command=choose_logo, width=15)
+logo_btn.place(x=300, y=375)
 
 # 색상 선택
 colors = ["black", "blue", "red", "green", "purple", "hotpink", "navy", "teal", "brown", "orange"]
@@ -234,10 +240,6 @@ file_combo = ttk.Combobox(root, values=["PNG", "JPG"], state="readonly", width=1
 file_combo.place(x=300, y=500)
 file_combo.set("PNG")
 
-# 로고 선택
-logo_btn = tk.Button(root, text="로고 선택", command=choose_logo, width=15)
-logo_btn.place(x=300, y=375)
 
 
 root.mainloop()
-
