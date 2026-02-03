@@ -110,7 +110,7 @@ def save_qr():
         )
         if not overwrite:
             return  # 저장 취소
-
+    # 파일 저장
     try:
         if file_type == "PNG":
             qr_pil_image.save(save_path)
@@ -134,14 +134,11 @@ def choose_save_path():
 def delete():
     global qr_pil_image, logo_path
 
-    # 입력값 초기화
     input_text.delete(1.0, tk.END)
-
-    # QR 이미지 제거
+    
     qr_image_label.config(image="")
     qr_image_label.image = None
 
-    # 내부 상태 초기화
     qr_pil_image = None
     logo_path = ""
 
