@@ -84,7 +84,7 @@ def update():
 # 날씨 업데이트(30분에 한번)
 def update_weather():
     weather_label.config(text=get_weather())
-    root.after(60000*3, update_weather)
+    root.after(60000*30, update_weather)
 
 
 
@@ -148,4 +148,4 @@ weather_label.pack(pady=5)
 
 update()
 update_weather()
-root.mainloop()
+root.mainloop())
