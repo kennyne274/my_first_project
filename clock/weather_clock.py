@@ -1,3 +1,6 @@
+# 날씨와 시간을 표시하는 디지털 시계
+# 날씨 정보는 공공데이터 포털에서 API키를 발급받아 합니다.
+
 import tkinter as tk
 import requests
 from datetime import datetime
