@@ -39,6 +39,8 @@ print(text)
 # 4. 워드클라우드 생성 (기본 버전, 마스크 없음)
 wordcloud = WordCloud(
     font_path="malgun.ttf",   # 한글 폰트 (Windows)
+    # font_path='/System/Library/Fonts/AppleGothic.ttf',  # Mac
+    # font_path='/usr/share/fonts/truetype/nanum/NanumGothic.ttf',  # Linux
     width=800,
     height=500,
     max_words=100,  # 최대 단어 수
