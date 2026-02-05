@@ -128,6 +128,7 @@ root.resizable(False, False)
 # =========================
 
 templates = [
+    "circle",
     "heart",
     "heart2",
     "apple_mask",
