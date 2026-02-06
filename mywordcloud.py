@@ -71,7 +71,7 @@ def make_cloud():
 
     # PIL 이미지 생성
     wc_image_original = wordcloud.to_image()
-    wc_image = wc_image_original.resize((480, 340), Image.LANCZOS)
+    wc_image = wc_image_original.resize((420, 360), Image.LANCZOS)
 
     wc_tk = ImageTk.PhotoImage(wc_image)
 
@@ -80,7 +80,7 @@ def make_cloud():
 
     #  Canvas에 이미지 삽입
     preview_canvas.create_image(
-        250, 180,           # 캔버스 중앙 좌표
+        210, 180,           # 캔버스 중앙 좌표
         image=wc_tk,
 
     )
@@ -120,7 +120,7 @@ def save_image():
 
 root = tk.Tk()
 root.title("워드클라우드 생성기 - Tkinter")
-root.geometry("820x520")
+root.geometry("750x520")
 root.resizable(False, False)
 
 # =========================
@@ -161,14 +161,14 @@ text.place(x=10, y=120)
 # 우측 미리보기
 # =========================
 preview_frame = tk.LabelFrame(root, text="미리보기")
-preview_frame.place(x=280, y=10, width=520, height=400)
+preview_frame.place(x=280, y=10, width=450, height=400)
 
 preview_canvas = tk.Canvas(
     preview_frame,
     bg="white",
     relief="sunken",
     bd=1,
-    width=500, 
+    width=420, 
     height=360
 )
 
@@ -178,8 +178,8 @@ preview_canvas.place(x=10, y=10)
 # 하단 선택 영역
 # =========================
 option_frame = tk.Frame(root)
-option_frame.place(x=10, y=420, width=790, height=50)
-tk.Label(option_frame, text="배경색상:").place(x=10, y=10)
+option_frame.place(x=10, y=420, width=740, height=50)
+tk.Label(option_frame, text="배경색상:").place(x=5, y=10)
 color_check = ttk.Combobox(
     option_frame,
     values=["white","ivory","mintcream","lavenderblush","azure",
@@ -194,9 +194,9 @@ color_check = ttk.Combobox(
     state="readonly",
     width=12
 )
-color_check.place(x=70, y=10)
+color_check.place(x=65, y=10)
 color_check.set("white")
-tk.Label(option_frame, text="색상:").place(x=200, y=12)
+tk.Label(option_frame, text="색상:").place(x=185, y=10)
 colors = ["Set1", "Set2", "Set3", "Pastel1", "Pastel2","hot","Spectral",
         "cool", "rainbow", "spring", "summer", "autumn", "winter", 
         "Blues", "Greens", "Oranges", "Reds", "Purples", "Greys", 
@@ -207,12 +207,12 @@ color_combo = ttk.Combobox(
     option_frame,
     values=colors,
     state="readonly",
-    width=12
+    width=11
 )
-color_combo.place(x=240, y=10)
+color_combo.place(x=225, y=10)
 color_combo.set("summer")
 
-tk.Label(option_frame, text="테두리색:").place(x=380, y=12)
+tk.Label(option_frame, text="테두리색:").place(x=345, y=10)
 line_colors = ["red", "yellow", "orange", "coral","green",
                 "teal", "cyan", "pink", "gold",
                "blue",  "brown", "purple",
@@ -221,13 +221,13 @@ line_combo = ttk.Combobox(
     option_frame,
     values=line_colors ,
     state="readonly",
-    width=12
+    width=11
 )
 line_combo.set("green")
-line_combo.place(x=450, y=10)
+line_combo.place(x=415, y=10)
 
 
-tk.Label(option_frame, text="글꼴선택:").place(x=580, y=12)
+tk.Label(option_frame, text="글꼴선택:").place(x=530, y=10)
 
 size_combo = ttk.Combobox(
 option_frame,
@@ -236,14 +236,14 @@ state="readonly",
 width=14
 )
 size_combo.set("맑은 고딕")
-size_combo.place(x=650, y=10)
+size_combo.place(x=600, y=10)
 
 
 # =========================
 # 버튼 
 # =========================
 btn_frame = tk.Frame(root)
-btn_frame.place(x=430, y=470, width=370, height=40)
+btn_frame.place(x=380, y=470, width=370, height=40)
 
 create_btn = tk.Button(btn_frame, text="생성", width=10, command=make_cloud)
 create_btn.place(x=0, y=5)
@@ -258,3 +258,4 @@ close_btn = tk.Button(btn_frame, text="닫기", width=10, command=root.destroy)
 close_btn.place(x=270, y=5)
 
 root.mainloop()
+
