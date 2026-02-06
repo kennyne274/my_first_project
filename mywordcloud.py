@@ -3,7 +3,6 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter import messagebox
-from tkinter import filedialog
 from wordcloud import WordCloud
 import numpy as np
 from PIL import Image
@@ -19,7 +18,8 @@ FONT_MAP = {
     "한컴고딕": "C:/Windows/Fonts/Hancom Gothic Bold.ttf",
     "Arial": "C:/Windows/Fonts/arial.ttf",
     "Times New Roman": "C:/Windows/Fonts/times.ttf",
-    "Verdana":"C:/Windows/Fonts/verdana.ttf"
+    "Verdana":"C:/Windows/Fonts/verdana.ttf",
+    "Courier" :"C:/Windows/Fonts/cour.ttf"
 }
 
 wc_image_original = None   # 원본 (저장용)
@@ -120,7 +120,7 @@ def save_image():
 
 root = tk.Tk()
 root.title("워드클라우드 생성기 - Tkinter")
-root.geometry("750x520")
+root.geometry("750x520+350+100")
 root.resizable(False, False)
 
 # =========================
@@ -179,7 +179,7 @@ preview_canvas.place(x=10, y=10)
 # =========================
 option_frame = tk.Frame(root)
 option_frame.place(x=10, y=420, width=740, height=50)
-tk.Label(option_frame, text="배경색상:").place(x=5, y=10)
+tk.Label(option_frame, text="배경색상:").place(x=0, y=10)
 color_check = ttk.Combobox(
     option_frame,
     values=["white","ivory","mintcream","lavenderblush","azure",
@@ -214,8 +214,8 @@ color_combo.set("summer")
 
 tk.Label(option_frame, text="테두리색:").place(x=345, y=10)
 line_colors = ["red", "yellow", "orange", "coral","green",
-                "teal", "cyan", "pink", "gold",
-               "blue",  "brown", "purple",
+                "teal", "cyan", "pink", "gold", "cadetblue",
+               "blue",  "brown", "purple", "plum", "tomato",
                "dimgray", "black", "navy", ]
 line_combo = ttk.Combobox(
     option_frame,
@@ -258,4 +258,3 @@ close_btn = tk.Button(btn_frame, text="닫기", width=10, command=root.destroy)
 close_btn.place(x=270, y=5)
 
 root.mainloop()
-
