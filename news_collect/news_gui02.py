@@ -3,12 +3,12 @@ from tkinter import ttk, messagebox
 from datetime import datetime
 import csv
 import os
+from tkinter import filedialog
 import requests
 from bs4 import BeautifulSoup
 from wordcloud import WordCloud
 import matplotlib.pyplot as plt
 
-# 아직 제작 중
 
 # 뉴스 섹션
 
@@ -125,8 +125,9 @@ def collection():
     # CSV 저장 & 워드클라우드 생성
     save_to_csv(titles)
     create_wordcloud(" ".join(titles))
+    my_folder = os.getcwd()
 
-    status_label.config(text=f"완료! {len(titles)}개 기사 수집 · CSV + 워드클라우드 저장됨", fg="green")
+    status_label.config(text=f"완료! {my_folder}에 파일 저장됨", fg="green")
 
 # 버튼 기능
 def start():
@@ -136,6 +137,43 @@ def exit_program():
     plt.close('all')               
     root.quit()
     root.destroy()
+
+
+def open_csv_file():
+    file_path = filedialog.askopenfilename(
+        title="CSV 파일 선택",
+        filetypes=[("CSV Files", "*.csv")],
+        initialdir=os.getcwd()
+    )
+
+    if not file_path:
+        return
+
+    csv_entry.delete(0, tk.END)
+    csv_entry.insert(0, file_path)
+    load_csv_to_text(file_path)
+
+
+def load_csv_to_text(file_path):
+    log_text.delete(1.0, tk.END)
+
+    try:
+        with open(file_path, newline="", encoding="utf-8-sig") as f:
+            reader = csv.reader(f)
+            rows = list(reader)
+
+        log_text.insert(tk.END, f"[CSV 파일 열기]\n{file_path}\n")
+        log_text.insert(tk.END, "─" * 50 + "\n")
+
+        for i, row in enumerate(rows[1:], 1):  # 헤더 제외
+            log_text.insert(tk.END, f"{i:2d}. {row[0]}\n")
+
+        log_text.see(tk.END)
+        status_label.config(text="CSV 파일 로드 완료", fg="green")
+
+    except Exception as e:
+        messagebox.showerror("오류", f"CSV 파일 열기 실패\n{e}")
+
 
 root = tk.Tk()
 root.title("Scraping Tool")
@@ -175,10 +213,10 @@ section_combo.grid(row=1, column=0, padx=5, pady= 5)
 extract_var = tk.BooleanVar()
 extract_check = tk.Checkbutton(
     config_frame,
-    text="추출 옵션 사용",
+    text="파일은 자동 생성, 저장됩니다",
     variable=extract_var
 )
-extract_check.grid(row=1, column=1, pady=5, padx=50)
+extract_check.grid(row=1, column=1, pady=5, padx=40)
 
 # =====================
 # CSV 파일 프레임
@@ -191,7 +229,7 @@ tk.Label(csv_frame, text="default.csv 파일:").grid(row=0, column=0, sticky="w"
 csv_entry = tk.Entry(csv_frame, width=62)
 csv_entry.grid(row=1, column=0, pady=5, sticky="w")
 
-csv_btn = tk.Button(csv_frame, text="찾기", width=12)
+csv_btn = tk.Button(csv_frame, text="찾기", width=12, command=open_csv_file)
 csv_btn.grid(row=1, column=1, padx=10)
 
 # =====================
@@ -248,5 +286,6 @@ log_text.insert(tk.END, "헤드라인 수집 시작...\n\n")
 log_text.pack(fill="both", expand=True)
 
 scrollbar.config(command=log_text.yview)
+
 
 root.mainloop()
