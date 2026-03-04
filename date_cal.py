@@ -40,8 +40,8 @@ def calculate_date():
         # 미래/과거 날짜 계산
         future_date = base_date + timedelta(days=days)
         # 엔트리 초기화 후 출력
-        entrt_result2.delete(0, tk.END)
-        entrt_result2.insert(0, f"{abs(days)}일 {get_text(days)}의 날짜는 {future_date.strftime('%Y-%m-%d')}")
+        entry_result2.delete(0, tk.END)
+        entry_result2.insert(0, f"{abs(days)}일 {get_text(days)}의 날짜는 {future_date.strftime('%Y-%m-%d')}")
     except:
         messagebox.showerror("오류", "날짜, 또는 일수를 바르게 입력하세요.")
 #============================================================
@@ -95,7 +95,7 @@ button_calculate_future = tk.Button(root, text="미래/과거\n날짜 계산", h
 button_calculate_future.grid(row=4, column=2, rowspan=2, sticky="ew", padx=5, pady=5)
 
 # 계산 결과 입력창
-entrt_result2 = tk.Entry(root, justify="right")
-entrt_result2.grid(row=6, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
+entry_result2 = tk.Entry(root, justify="right")
+entry_result2.grid(row=6, column=0, columnspan=3, sticky="ew", padx=5, pady=5)
 
 root.mainloop()
