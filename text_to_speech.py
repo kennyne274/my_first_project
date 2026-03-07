@@ -4,8 +4,6 @@ from playsound3 import playsound
 from gtts import gTTS
 import os
 
-# 음성 AI 서비스 프로그램
-
 # 문자를 음성으로 변환하여 재생
 def play(text):
     lang = languages[input_lang.get()]
@@ -24,8 +22,10 @@ def play(text):
     tts.save(filename)
     playsound(filename)
     # 재생한 파일 삭제
-    if os.path.exists(filename):
+    try:
         os.remove(filename)
+    except PermissionError:
+        pass
        
     
 # 텍스트에 입력한 문자를 받아오는 함수
@@ -91,15 +91,15 @@ title_label.pack(pady=10)
 text_frame = tk.Frame(root)
 text_frame.pack()
 
-# scroballbar
-scroballbar = tk.Scrollbar(text_frame)
-scroballbar.pack(side="right", fill="y")
+# scrollbar
+scrollbar = tk.Scrollbar(text_frame)
+scrollbar.pack(side="right", fill="y")
 
 # text_area
 text_area = tk.Text(text_frame, height=12, width=80, font=("Arial", 12, "bold"))
 text_area.pack(side="left")
-text_area.config(yscrollcommand=scroballbar.set)
-scroballbar.config(command=text_area.yview)
+text_area.config(yscrollcommand=scrollbar.set)
+scrollbar.config(command=text_area.yview)
 
 # Frame for options
 options_frame = ttk.Frame(root)
@@ -117,7 +117,7 @@ tk.Label(options_frame, text="입력 언어").grid(row=0, column=2, pady=10, pad
 # 음성 언어 콤보박스 
 input_lang = ttk.Combobox(options_frame, values=list((languages.keys())), state="readonly", width=15)
 input_lang.grid(row=0, column=3, pady=10, padx=10)
-input_lang.set("한국어")
+input_lang.set("영어")
 
 
 # buttons
