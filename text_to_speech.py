@@ -52,7 +52,14 @@ def save_audio():
         return
 
     lang = languages[input_lang.get()]
-    tts = gTTS(text, lang=lang)
+    speed = speed_menu.get()
+
+    if speed == "slow":
+        slow = True
+    else:
+        slow = False
+        
+    tts = gTTS(text, lang=lang, slow=slow)
     tts.save(file)
 
 # 번역 가능 언어 목록
@@ -110,7 +117,6 @@ ttk.Label(options_frame, text="Speed :").grid(row=0, column=0)
 speed_var = tk.StringVar(value="fast")
 speed_menu = ttk.Combobox(options_frame, textvariable=speed_var, values=["fast", "slow"], width=15, state="readonly")
 speed_menu.grid(row=0, column=1, pady=10, padx=10)
-speed_menu.set("fast")
 
 tk.Label(options_frame, text="입력 언어").grid(row=0, column=2, pady=10, padx=10)
 
@@ -146,4 +152,4 @@ save_btn = tk.Button(button_frame,
 save_btn.grid(row=0, column=3, padx=10)
 
 
-tk.mainloop()
+root.mainloop()
