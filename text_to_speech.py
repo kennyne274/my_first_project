@@ -4,6 +4,8 @@ from playsound3 import playsound
 from gtts import gTTS
 import os
 
+
+
 # 문자를 음성으로 변환하여 재생
 def play(text):
     lang = languages[input_lang.get()]
@@ -14,10 +16,13 @@ def play(text):
     else:
         slow = False
     # 음성 변환
-    tts = gTTS(text ,
-                lang = lang, 
-                slow = slow)
-    
+    try:
+        tts = gTTS(text ,
+                    lang = lang, 
+                    slow = slow)
+    except Exception as e:
+        messagebox.showerror("에러", f"재생 중 에러가 발생했습니다\n{e}")
+
     filename = "test_voice.mp3"
     tts.save(filename)
     playsound(filename)
@@ -58,7 +63,7 @@ def save_audio():
         slow = True
     else:
         slow = False
-        
+
     tts = gTTS(text, lang=lang, slow=slow)
     tts.save(file)
 
@@ -86,7 +91,7 @@ languages = {
 # ==================tkinter GUI==================
 
 root = tk.Tk()
-root.title("text to speech convertor")
+root.title("text to speech converter")
 root.geometry("600x450")
 root.resizable(0, 0)
 
@@ -118,7 +123,7 @@ speed_var = tk.StringVar(value="fast")
 speed_menu = ttk.Combobox(options_frame, textvariable=speed_var, values=["fast", "slow"], width=15, state="readonly")
 speed_menu.grid(row=0, column=1, pady=10, padx=10)
 
-tk.Label(options_frame, text="입력 언어").grid(row=0, column=2, pady=10, padx=10)
+ttk.Label(options_frame, text="입력 언어").grid(row=0, column=2, pady=10, padx=10)
 
 # 음성 언어 콤보박스 
 input_lang = ttk.Combobox(options_frame, values=list((languages.keys())), state="readonly", width=15)
