@@ -1,11 +1,16 @@
 import pygame
 
+# 벽돌을 그리는 함수
+def draw_brick(bricks, color):
+    for i in  bricks:
+        pygame.draw.rect(screen, color, i)
+
 # 게임 초기화
 pygame.init()
 # 화면 크기
 size = (600, 700)
 screen = pygame.display.set_mode(size)
-pygame.display.set_caption("Break Breaker Game")
+pygame.display.set_caption("Brick Breaker Game")
 
 clock = pygame.time.Clock()
 FPS = 120
@@ -37,9 +42,6 @@ b2 = [pygame.Rect(1 + i * 100, 100, 97, 38) for i in range(6)]
 b3 = [pygame.Rect(1 + i * 100, 140, 97, 38) for i in range(6)]
 b4 = [pygame.Rect(1 + i * 100, 180, 97, 38) for i in range(6)]
 
-def draw_brick(bricks, color):
-    for i in  bricks:
-        pygame.draw.rect(screen, color, i)
 
 # 게임 진행 구간
 while game:
@@ -56,7 +58,7 @@ while game:
     # 키보드의 ⬅️➡️ 키를 눌러 패들을 이동함
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
-            if floor.x < 540:
+            if floor.x < 480:
                 floor.x = floor.x + 7 # 패들의 이동 속도(오른쪽)
                 
         if event.key == pygame.K_LEFT:
@@ -73,7 +75,7 @@ while game:
     ball.y = ball.y + move[1]
 
     # 볼이 천장이나 벽에 닿으면 튕겨내기
-    if ball.x > 590 or ball.x < 0:
+    if ball.x > 580 or ball.x < 0:
         move[0] = -move[0]
     if ball.y <= 3:
         move[1] = -move[1]
@@ -94,7 +96,8 @@ while game:
         pygame.time.wait(3000)
         break
     
-    pygame.draw.rect(screen, WHITE, ball)
+    # 공 그리기
+    pygame.draw.circle(screen, WHITE, ball.center, 10)
 
     brick_layers = [b1, b2, b3, b4]
     # 공이 벽돌에 닿으면 제거
@@ -121,5 +124,6 @@ while game:
     clock.tick(FPS)
 
 pygame.quit()
+
 
 
