@@ -1,6 +1,6 @@
 import pygame
 
-# 벽돌을 그리는 함수
+# 화면에 벽돌을 그리는 함수
 def draw_brick(bricks, color):
     for i in  bricks:
         pygame.draw.rect(screen, color, i)
