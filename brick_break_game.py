@@ -1,6 +1,6 @@
 import pygame
 
-# 화면에 벽돌을 그리는 함수
+# 벽돌을 그리는 함수
 def draw_brick(bricks, color):
     for i in  bricks:
         pygame.draw.rect(screen, color, i)
@@ -16,7 +16,7 @@ clock = pygame.time.Clock()
 FPS = 120
 
 # 패들
-floor = pygame.Rect(100, 650, 200, 30)
+paddle = pygame.Rect(100, 650, 200, 30)
 # 공
 ball = pygame.Rect(50, 350, 20, 20)
 # 점수
@@ -50,7 +50,7 @@ while game:
             game = False
     # 게임 화면은 검정색으로 설정
     screen.fill(BLACK)
-    pygame.draw.rect(screen, PINK, floor)
+    pygame.draw.rect(screen, PINK, paddle)
     font = pygame.font.Font(None, 34)
     text = font.render("CURRENT SCORE: " + str(score), 1, WHITE)
     screen.blit(text, (180, 10))
@@ -58,12 +58,12 @@ while game:
     # 키보드의 ⬅️➡️ 키를 눌러 패들을 이동함
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
-            if floor.x < 480:
-                floor.x = floor.x + 7 # 패들의 이동 속도(오른쪽)
+            if paddle.x < 480:
+                paddle.x = paddle.x + 7 # 패들의 이동 속도(오른쪽)
                 
         if event.key == pygame.K_LEFT:
-            if floor.x > 0:
-                floor.x = floor.x - 7 # 패들의 이동 속도(왼쪽)
+            if paddle.x > 0:
+                paddle.x = paddle.x - 7 # 패들의 이동 속도(왼쪽)
 
     # 벽돌 그리기
     draw_brick(b1, RED)
@@ -80,7 +80,7 @@ while game:
     if ball.y <= 3:
         move[1] = -move[1]
     # 공이 패들에 닿으면 튕겨내기
-    if floor.collidepoint(ball.x, ball.y):
+    if paddle.collidepoint(ball.x, ball.y):
         move[1] = -move[1]
 
     # 볼이 바닥에 닿았을 때 종료 처리 및 점수 표시
@@ -124,6 +124,7 @@ while game:
     clock.tick(FPS)
 
 pygame.quit()
+
 
 
 
