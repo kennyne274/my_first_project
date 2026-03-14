@@ -8,7 +8,7 @@ screen = pygame.display.set_mode(size)
 pygame.display.set_caption("Break Breaker Game")
 
 clock = pygame.time.Clock()
-FPS = 300
+FPS = 120
 
 # 패들
 floor = pygame.Rect(100, 650, 200, 30)
@@ -17,7 +17,7 @@ ball = pygame.Rect(50, 350, 20, 20)
 # 점수
 score = 0
 # 공의 이동방향
-move = [1, 1]
+move = [3, 3]
 
 game = True
 
@@ -53,15 +53,15 @@ while game:
     text = font.render("CURRENT SCORE: " + str(score), 1, WHITE)
     screen.blit(text, (180, 10))
 
-    # ⬅️➡️ 키를 눌러 패들을 이동함
+    # 키보드의 ⬅️➡️ 키를 눌러 패들을 이동함
     if event.type == pygame.KEYDOWN:
         if event.key == pygame.K_RIGHT:
             if floor.x < 540:
-                floor.x = floor.x + 3
+                floor.x = floor.x + 7 # 패들의 이동 속도(오른쪽)
                 
         if event.key == pygame.K_LEFT:
             if floor.x > 0:
-                floor.x = floor.x-3
+                floor.x = floor.x - 7 # 패들의 이동 속도(왼쪽)
 
     # 벽돌 그리기
     draw_brick(b1, RED)
@@ -121,4 +121,5 @@ while game:
     clock.tick(FPS)
 
 pygame.quit()
+
 
