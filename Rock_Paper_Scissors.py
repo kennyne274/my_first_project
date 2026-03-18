@@ -4,47 +4,62 @@ import time
 
 choices = ["가위", "바위", "보"]
 
+wins = 0
+losses = 0
+draws = 0
+
 print("="*30)
 print("가위 바위 보 게임을 시작합니다")
-print()
-print("가위(0), 바위(1), 보(2)")
 print("게임을 중단하고 싶으면 'q'를 입력하세요.")
 print("="*30)
 
+# 게임 진행 구간
 while True:
 
     try:
-        user = input("가위(0), 바위(1), 보(2) 중 선택한 숫자를 입력 : ").lower()
-        if user == 'q':
+        user = input("가위, 바위, 보! : ").strip()
+        if user == 'q' or user == 'Q': # 'q', 혹은 'Q'를 입력하면 게임 종료
             print("게임 종료") 
             break
-        else:
-            user = int(user)
-
-        if user not in [0, 1, 2]:
-            raise ValueError # 범위 밖의 정수를 입력하면 에러를 발생시킴
+    
+        if user not in choices:
+            raise ValueError # 범위 밖의 정수를 입력하면 ValueError를 발생시킴
 
     except ValueError:
-        print("정수 0, 1, 2, q 중 하나만 입력하세요.")
+        print("가위, 바위, 보 중에 하나만 입력하세요.")
+        print("종료를 원하면 q를 입력하세요.")
         continue
     
 
     else:
-        computer = random.randint(0, 2)
+        computer = random.choice(choices)
 
         time.sleep(1)
-        print(f"당신의 선택 {choices[user]}")
+        print(f"당신의 선택 {user}")
         time.sleep(1)
-        print(f"컴퓨터의 선택 {choices[computer]}")
+        print(f"컴퓨터의 선택 {computer}")
         time.sleep(1)
         if user == computer:
             print("비겼습니다 🤔 한판 더?")
-        elif(user == 0 and computer == 2) or \
-            (user == 1 and computer == 0) or\
-            (user == 2 and computer == 1):
+            draws += 1
+        elif(user == "가위" and computer == "보") or \
+            (user == "바위" and computer == "가위") or\
+            (user == "보" and computer == "바위"):
             print("당신이 이겼습니다 😓")
+            wins += 1
         else:
             print("컴퓨터의 승리 😂 약 오르지?")
-        
-        print("="*30)
-    
+            losses += 1
+
+# 통계 출력 및 승률 계산 
+total = wins + draws + losses
+if total > 0:
+    wins_rate = wins/total * 100
+else:
+    wins_rate = 0
+
+print("="*30)
+print(f"승: {wins} | 패: {losses} | 무: {draws}")
+print(f"승률 {wins_rate:.2f}")
+print("="*30)
+
