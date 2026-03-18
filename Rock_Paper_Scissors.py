@@ -22,7 +22,7 @@ while True:
             user = int(user)
 
         if user not in [0, 1, 2]:
-            raise ValueError # 범위 밖의 정수를 입력하면 에러로 처리함
+            raise ValueError # 범위 밖의 정수를 입력하면 에러를 발생시킴
 
     except ValueError:
         print("정수 0, 1, 2, q 중 하나만 입력하세요.")
