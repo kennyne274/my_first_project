@@ -65,7 +65,7 @@ to_y = 0
 
 # 이동 속도
 character_speed = 0.6
-enemy_speed = 10
+enemy_speed = 7 # <=외계인 속도
 
 # 점수
 score = 0
