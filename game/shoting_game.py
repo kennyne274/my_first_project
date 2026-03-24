@@ -93,7 +93,10 @@ running = True # 게임이 진행중인가?
 while running:
     dt = clock.tick(60) # 게임 화면당 초당 프레임수 설정
 
-    # 2. 이벤트 처리 (키보드, 마우스 등)
+    # 현재 화면의 실제 크기 가져오기 (일반/풀스크린 모두 대응)
+    current_width, current_height = screen.get_size()
+
+    # 이벤트 처리 (키보드, 마우스 등)
     for event in pygame.event.get(): # 어떤 이벤트가 발생하였는가?
         if event.type == pygame.QUIT: # 창이 닫히는 이벤트가 발생하였는가?
             running = False # 게임이 진행 중이 아님
@@ -101,6 +104,9 @@ while running:
         if event.type == pygame.KEYDOWN:  # 키가 눌러졌는지 확인
             if event.key == pygame.K_F1: # F1키를 누르면 풀스크린 모드로 전환
                 screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
+                # 풀스크린으로 바뀐 후 캐릭터를 중앙으로 재배치
+                current_width, current_height = screen.get_size()
+                character_x_pos = (current_width / 2) - (character_width / 2)
             if event.key == pygame.K_ESCAPE: # ESC키를 누르면 화면을 원래대로 전환
                 screen = pygame.display.set_mode((screen_width, screen_height))
             
@@ -131,14 +137,14 @@ while running:
     # 가로 경계값 처리
     if character_x_pos < 0:
         character_x_pos = 0
-    elif character_x_pos  > screen_width - character_width:
-        character_x_pos = screen_width - character_width
+    elif character_x_pos  > current_width - character_width:
+        character_x_pos = current_width - character_width
 
     # 세로 경계값 처리
     if character_y_pos < 0:
         character_y_pos = 0
-    elif character_y_pos > screen_height - character_height:
-        character_y_pos = screen_height - character_height
+    elif character_y_pos > current_height - character_height:
+        character_y_pos = current_height - character_height
 
     enemy_y_pos += enemy_speed
 
@@ -174,11 +180,8 @@ while running:
             bgm.stop()
             gameover_sound.play()
 
-             # 현재 화면의 실제 크기 가져오기 (일반/풀스크린 모두 대응)
-            current_width, current_height = screen.get_size()
-
             # GAME OVER 텍스트
-            game_over_font = pygame.font.Font(None, 180)        # 크기 크게
+            game_over_font = pygame.font.Font(None, 180)       
             game_over_text = game_over_font.render("GAME OVER", True, (255, 50, 50))
             
             # 화면 중앙에 배치
