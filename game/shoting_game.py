@@ -3,6 +3,7 @@ import random
 import os
 ########################################################
 pygame.init() # 초기화 (반드시 필요)
+pygame.mixer.init()  # 사운드 초기화
 
 # 화면 크기 설정
 screen_width = 820 # 가로 크기
@@ -10,7 +11,7 @@ screen_height = 700 # 세로 크기
 screen = pygame.display.set_mode((screen_width, screen_height))
 
 # 화면 타이틀 설정
-pygame.display.set_caption("벽돌 피하기") # 게임 이름
+pygame.display.set_caption("Shooting Game") # 게임 이름
 
 # FPS
 clock = pygame.time.Clock()
@@ -22,8 +23,24 @@ clock = pygame.time.Clock()
 current_path = os.path.dirname(__file__) # 현재 파일의 위치 반환
 image_path = os.path.join(current_path, "image")
 
+sound_path = os.path.join(current_path, "sound")
+shoot_sound = pygame.mixer.Sound(os.path.join(sound_path, "shoot.wav"))
+hit_enemy_sound = pygame.mixer.Sound(os.path.join(sound_path, "enemy_hit.wav"))
+
+
 # 배경 만들기
 background = pygame.image.load(os.path.join(image_path, "space.png"))
+
+# 배경 음악
+bgm = pygame.mixer.Sound(os.path.join(sound_path, "main.mp3"))
+bgm.set_volume(0.4)  
+
+# 효과음
+shoot_sound = pygame.mixer.Sound(os.path.join(sound_path, "shoot.wav"))
+hit_enemy_sound = pygame.mixer.Sound(os.path.join(sound_path, "enemy_hit.wav"))
+crash_sound = pygame.mixer.Sound(os.path.join(sound_path, "crash.wav"))
+gameover_sound = pygame.mixer.Sound(os.path.join(sound_path, "gameover.wav"))
+
 
 # 캐릭터 
 character = pygame.image.load(os.path.join(image_path, "ship.png"))
@@ -35,7 +52,7 @@ character_y_pos = screen_height - character_height # 화면 하단에 위치
 
 # 적
 
-enemy= pygame.image.load(os.path.join(image_path, "brick.png"))# 캐릭터의 가로 크기
+enemy= pygame.image.load(os.path.join(image_path, "enemy.png"))# 캐릭터의 가로 크기
 enemy_size = enemy.get_rect().size # 이미지 크기를 구해옴
 enemy_width = enemy_size[0] # 캐릭터의 가로 크기
 enemy_height = enemy_size[1] # 캐릭터의 세로 크기
@@ -56,9 +73,6 @@ score = 0
 # 수명
 lives = 3
 
-# 폰트 정의
-game_font = pygame.font.Font(None, 40) # 폰트 객체 생성(폰트, 크기)
-
 # 총알 만들기
 bullet = pygame.image.load(os.path.join(image_path, "bullet.png"))
 bullet_size = bullet.get_rect().size # 이미지 크기를 구해옴
@@ -70,6 +84,9 @@ bullets = []
 # 총알 속도
 bullet_speed = 10
 bullet_to_remove = -1
+
+# 배경음악 시작 (-1 = 무한 반복)
+bgm.play(-1)
 
 # 이벤트 루프
 running = True # 게임이 진행중인가?
@@ -99,6 +116,7 @@ while running:
                 bullet_x_pos = character_x_pos + (character_width / 2) - (bullet_width / 2)
                 bullet_y_pos = character_y_pos - character_height
                 bullets.append([bullet_x_pos, bullet_y_pos])
+                shoot_sound.play()
             
             
         if event.type == pygame.KEYUP: # 키를 뗐을 때
@@ -147,11 +165,40 @@ while running:
     # 충돌 체크
     if character_rect.colliderect(enemy_rect):
         lives -= 1
+        crash_sound.play()
 
         enemy_y_pos = 0
         enemy_x_pos = random.randint(0, screen_width - enemy_width)
 
         if lives <= 0:
+            bgm.stop()
+            gameover_sound.play()
+
+             # 현재 화면의 실제 크기 가져오기 (일반/풀스크린 모두 대응)
+            current_width, current_height = screen.get_size()
+
+            # GAME OVER 텍스트
+            game_over_font = pygame.font.Font(None, 180)        # 크기 크게
+            game_over_text = game_over_font.render("GAME OVER", True, (255, 50, 50))
+            
+            # 화면 중앙에 배치
+            text_rect = game_over_text.get_rect(
+                center=(current_width // 2, current_height // 2 - 60)
+            )
+            screen.blit(game_over_text, text_rect)
+
+            # 최종 점수
+            score_font = pygame.font.Font(None, 100)
+            score_text = score_font.render(f"FINAL SCORE : {score}", True, (0, 255, 200))
+            score_rect = score_text.get_rect(
+                center=(current_width // 2, current_height // 2 + 40)
+            )
+            screen.blit(score_text, score_rect)
+
+            # 화면 갱신
+            pygame.display.flip() 
+            # 3초 대기
+            pygame.time.delay(3000)
             running = False
 
     for bullet_idx, bullet_val in enumerate(bullets):
@@ -169,6 +216,7 @@ while running:
             enemy_y_pos = 0
             enemy_x_pos = random.randint(0, screen_width - enemy_width)
             score += 1
+            hit_enemy_sound.play()
 
     # 총알 제거
     if bullet_to_remove > -1:
@@ -183,13 +231,15 @@ while running:
     for bullet_x_pos, bullet_y_pos in bullets:
         screen.blit(bullet, (bullet_x_pos, bullet_y_pos))
 
+    
+    # 폰트 정의
+    game_font = pygame.font.Font(None, 40) # 폰트 객체 생성(폰트, 크기)
     score_text = game_font.render(f"SCORE : {score}  LIFE : {lives}", True, (255,255,0))
     screen.blit(score_text, (10, 10))
 
 
     pygame.display.update() # 게임 화면 업데이트
 
-# 종료 전 1초 동안 대기
-pygame.time.delay(2000)
 # 게임 종료
 pygame.quit()
+
