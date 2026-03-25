@@ -1,6 +1,23 @@
 import pygame
 import random
 import os
+            
+def character_move(keys, speed):
+    # 이동할 좌표
+    to_x = 0
+    to_y = 0
+
+    if keys[pygame.K_LEFT]:
+        to_x -= speed
+    if keys[pygame.K_RIGHT]:
+        to_x += speed
+    if keys[pygame.K_UP]:
+        to_y -= speed
+    if keys[pygame.K_DOWN]:
+        to_y += speed
+        
+    return to_x, to_y
+
 ########################################################
 pygame.init() # 초기화 (반드시 필요)
 pygame.mixer.init()  # 사운드 초기화
@@ -22,14 +39,11 @@ clock = pygame.time.Clock()
 
 current_path = os.path.dirname(__file__) # 현재 파일의 위치 반환
 image_path = os.path.join(current_path, "image")
-
 sound_path = os.path.join(current_path, "sound")
-shoot_sound = pygame.mixer.Sound(os.path.join(sound_path, "shoot.wav"))
-hit_enemy_sound = pygame.mixer.Sound(os.path.join(sound_path, "enemy_hit.wav"))
-
 
 # 배경 만들기
 background = pygame.image.load(os.path.join(image_path, "space.png"))
+bg_y = 0
 
 # 배경 음악
 bgm = pygame.mixer.Sound(os.path.join(sound_path, "main.mp3"))
@@ -41,7 +55,6 @@ hit_enemy_sound = pygame.mixer.Sound(os.path.join(sound_path, "enemy_hit.wav"))
 crash_sound = pygame.mixer.Sound(os.path.join(sound_path, "crash.wav"))
 gameover_sound = pygame.mixer.Sound(os.path.join(sound_path, "gameover.wav"))
 
-
 # 캐릭터 
 character = pygame.image.load(os.path.join(image_path, "ship.png"))
 character_size = character.get_rect().size # 이미지 크기를 구해옴
@@ -51,7 +64,6 @@ character_x_pos = (screen_width / 2) - (character_width / 2) # 화면 가로 중
 character_y_pos = screen_height - character_height # 화면 하단에 위치
 
 # 적
-
 enemy= pygame.image.load(os.path.join(image_path, "enemy.png"))# 캐릭터의 가로 크기
 enemy_size = enemy.get_rect().size # 이미지 크기를 구해옴
 enemy_width = enemy_size[0] # 캐릭터의 가로 크기
@@ -59,13 +71,10 @@ enemy_height = enemy_size[1] # 캐릭터의 세로 크기
 enemy_x_pos = random.randint(0, screen_width - enemy_width)
 enemy_y_pos = 0 + enemy_height # 화면 상단에 위치
 
-# 이동할 좌표 
-to_x = 0
-to_y = 0
 
 # 이동 속도
-character_speed = 0.6
-enemy_speed = 7 # <=외계인 속도
+character_speed = 0.5
+enemy_speed = 0.4
 
 # 점수
 score = 0
@@ -82,7 +91,7 @@ bullet_width = bullet_size[0]
 bullets = []
 
 # 총알 속도
-bullet_speed = 10
+bullet_speed = 1
 bullet_to_remove = -1
 
 # 배경음악 시작 (-1 = 무한 반복)
@@ -95,7 +104,6 @@ while running:
 
     # 현재 화면의 실제 크기 가져오기 (일반/풀스크린 모두 대응)
     current_width, current_height = screen.get_size()
-
     # 이벤트 처리 (키보드, 마우스 등)
     for event in pygame.event.get(): # 어떤 이벤트가 발생하였는가?
         if event.type == pygame.QUIT: # 창이 닫히는 이벤트가 발생하였는가?
@@ -109,27 +117,18 @@ while running:
                 character_x_pos = (current_width / 2) - (character_width / 2)
             if event.key == pygame.K_ESCAPE: # ESC키를 누르면 화면을 원래대로 전환
                 screen = pygame.display.set_mode((screen_width, screen_height))
-            
-            if event.key == pygame.K_LEFT: # 캐릭터를 왼쪽으로
-                to_x -= character_speed
-            elif event.key == pygame.K_RIGHT: # 캐릭터를 오른쪽으로
-                to_x += character_speed
-            elif event.key == pygame.K_UP: # 캐릭터를 위로
-                to_y -= character_speed
-            elif event.key == pygame.K_DOWN: # 캐릭터를 아래로
-                to_y += character_speed
-            elif event.key == pygame.K_SPACE: # 스페이스키 누르면 총알 발사
+
+            # 스페이스키 누르면 총알 발사
+            if event.key == pygame.K_SPACE: 
                 bullet_x_pos = character_x_pos + (character_width / 2) - (bullet_width / 2)
                 bullet_y_pos = character_y_pos - character_height
                 bullets.append([bullet_x_pos, bullet_y_pos])
                 shoot_sound.play()
-            
-            
-        if event.type == pygame.KEYUP: # 키를 뗐을 때
-            if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
-                to_x = 0
-            elif event.key == pygame.K_UP or event.key == pygame.K_DOWN:
-                to_y = 0
+
+    # 키 입력 → 이동 방향 계산
+    keys = pygame.key.get_pressed()
+    to_x, to_y = character_move(keys, character_speed)
+         
             
     character_x_pos += to_x * dt
     character_y_pos += to_y * dt
@@ -146,14 +145,14 @@ while running:
     elif character_y_pos > current_height - character_height:
         character_y_pos = current_height - character_height
 
-    enemy_y_pos += enemy_speed
+    enemy_y_pos += enemy_speed * dt
 
     if enemy_y_pos > screen_height:
         enemy_y_pos = 0
         enemy_x_pos = random.randint(0, screen_width - enemy_width)
 
     # 총알 위치 조정
-    bullets = [[b[0], b[1] - bullet_speed] for b in bullets] # 총알 위치를 위로
+    bullets = [[b[0], b[1] - bullet_speed * dt] for b in bullets] # 총알 위치를 위로
 
     # 범위를 벗어난 총알 제거하기
     bullets = [[b[0], b[1]] for b in bullets if b[1] > 0]
@@ -228,12 +227,16 @@ while running:
 
  
     # 화면에 그리기
-    screen.blit(background, (0, 0))
+    # 배경 화면 스크롤
+    bg_y = (bg_y + 8) % screen_height
+    screen.blit(background, [0, bg_y - 700])
+    screen.blit(background, [0, bg_y])
+
+    # 캐릭터와 적을 그리기
     screen.blit(character, (character_x_pos, character_y_pos))
     screen.blit(enemy, (enemy_x_pos, enemy_y_pos))
     for bullet_x_pos, bullet_y_pos in bullets:
         screen.blit(bullet, (bullet_x_pos, bullet_y_pos))
-
     
     # 폰트 정의
     game_font = pygame.font.Font(None, 40) # 폰트 객체 생성(폰트, 크기)
