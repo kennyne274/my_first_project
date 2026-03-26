@@ -1,7 +1,8 @@
 import pygame
 import random
 import os
-            
+ 
+# 캐릭터 이동 함수
 def character_move(keys, speed):
     # 이동할 좌표
     to_x = 0
@@ -71,6 +72,13 @@ enemy_height = enemy_size[1] # 캐릭터의 세로 크기
 enemy_x_pos = random.randint(0, screen_width - enemy_width)
 enemy_y_pos = 0 + enemy_height # 화면 상단에 위치
 
+# 폭발
+explosion = pygame.image.load(os.path.join(image_path, "explosion.png"))
+
+exploding = False
+explosion_timer = 0
+explosion_x = 0
+explosion_y = 0
 
 # 이동 속도
 character_speed = 0.5
@@ -215,10 +223,18 @@ while running:
         # 충돌 체크
         if bullet_rect.colliderect(enemy_rect):
             bullet_to_remove = bullet_idx
-            enemy_y_pos = 0
-            enemy_x_pos = random.randint(0, screen_width - enemy_width)
             score += 1
             hit_enemy_sound.play()
+
+            # 폭발 시작
+            exploding = True
+            explosion_timer = pygame.time.get_ticks()
+            explosion_x = enemy_x_pos
+            explosion_y = enemy_y_pos
+
+            # 적 숨기기 (즉시 리스폰 안 함)
+            enemy_y_pos = -100
+
 
     # 총알 제거
     if bullet_to_remove > -1:
@@ -227,6 +243,7 @@ while running:
 
  
     # 화면에 그리기
+    
     # 배경 화면 스크롤
     bg_y = (bg_y + 8) % screen_height
     screen.blit(background, [0, bg_y - 700])
@@ -237,6 +254,18 @@ while running:
     screen.blit(enemy, (enemy_x_pos, enemy_y_pos))
     for bullet_x_pos, bullet_y_pos in bullets:
         screen.blit(bullet, (bullet_x_pos, bullet_y_pos))
+
+    # 폭발 중이면
+    if exploding:
+        screen.blit(explosion, (explosion_x, explosion_y))
+
+        # 200ms 후 종료
+        if pygame.time.get_ticks() - explosion_timer > 200:
+            exploding = False
+
+            # 적 리스폰
+            enemy_y_pos = 0
+            enemy_x_pos = random.randint(0, screen_width - enemy_width)
     
     # 폰트 정의
     game_font = pygame.font.Font(None, 40) # 폰트 객체 생성(폰트, 크기)
@@ -248,4 +277,5 @@ while running:
 
 # 게임 종료
 pygame.quit()
+
 
