@@ -2,7 +2,6 @@ import pygame
 import random
 import os
 
-# 리펙토링 중
 ###########################################################
 
 RED = (255, 0, 0)
@@ -36,7 +35,7 @@ explosion = pygame.image.load(os.path.join(image_path, "explosion.png"))
 
 # 총알
 bullet = pygame.image.load(os.path.join(image_path, "bullet.png"))
-bullet_size = bullet.get_rect().size 
+bullet_size = bullet.get_rect().size # 이미지 크기를 구해옴
 bullet_width = bullet_size[0] 
 
  
@@ -113,11 +112,6 @@ def main():
     # 수명
     lives = 3
 
-    # 총알 만들기
-    bullet = pygame.image.load(os.path.join(image_path, "bullet.png"))
-    bullet_size = bullet.get_rect().size # 이미지 크기를 구해옴
-    bullet_width = bullet_size[0] 
-
     # 총알은 한 번에 여러 발 발사 가능
     bullets = []
 
@@ -125,22 +119,22 @@ def main():
     bullet_speed = 1
     bullet_to_remove = -1
 
-    # 배경음악 시작 (-1 = 무한 반복)
+    # 배경음악 시작 
     bgm.play(-1)
 
     # 이벤트 루프
-    running = True # 게임이 진행중인가?
+    running = True 
     while running:
         dt = clock.tick(60) # 게임 화면당 초당 프레임수 설정
 
         # 현재 화면의 실제 크기 가져오기 (일반/풀스크린 모두 대응)
         current_width, current_height = screen.get_size()
         # 이벤트 처리 (키보드, 마우스 등)
-        for event in pygame.event.get(): # 어떤 이벤트가 발생하였는가?
-            if event.type == pygame.QUIT: # 창이 닫히는 이벤트가 발생하였는가?
-                running = False # 게임이 진행 중이 아님
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT: 
+                running = False 
 
-            if event.type == pygame.KEYDOWN:  # 키가 눌러졌는지 확인
+            if event.type == pygame.KEYDOWN:  
                 if event.key == pygame.K_F1: # F1키를 누르면 풀스크린 모드로 전환
                     screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
                     # 풀스크린으로 바뀐 후 캐릭터를 중앙으로 재배치
@@ -295,11 +289,10 @@ def main():
         score_text = game_font.render(f"SCORE : {score}  LIFE : {lives}", True, (255,255,0))
         screen.blit(score_text, (10, 10))
 
-
                 # 화면 갱신
         pygame.display.flip() 
 
 
 if __name__ == '__main__':
     main()
-
+    pygame.quit()
