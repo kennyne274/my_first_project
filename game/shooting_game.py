@@ -1,7 +1,6 @@
 # 리펙토리 중
 
 import pygame
-import sys
 import random
 import os
 
@@ -35,6 +34,7 @@ enemy= pygame.image.load(os.path.join(image_path, "enemy.png"))
 enemy_size = enemy.get_rect().size # 이미지 크기를 구해옴
 enemy_width = enemy_size[0] # 캐릭터의 가로 크기
 enemy_height = enemy_size[1] # 캐릭터의 세로 크기
+
 
 # 총알
 bullet = pygame.image.load(os.path.join(image_path, "bullet.png"))
@@ -120,7 +120,6 @@ def main():
         for event in pygame.event.get(): 
             if event.type == pygame.QUIT: 
                 running = False 
-                sys.exit() # 게임 종료
 
             if event.type == pygame.KEYDOWN:  
                 if event.key == pygame.K_F1: # F1키를 누르면 풀스크린 모드로 전환
@@ -209,9 +208,9 @@ def main():
                 )
                 screen.blit(score_text, score_rect)
 
-                # 3초 대기
                 # 화면 갱신
                 pygame.display.flip() 
+                # 3초 대기
                 pygame.time.delay(3000)
                 running = False
 
