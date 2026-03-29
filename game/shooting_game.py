@@ -135,10 +135,9 @@ def main():
                 running = False 
 
             if event.type == pygame.KEYDOWN:  
-                if event.key == pygame.K_F1: # F1키를 누르면 풀스크린 모드로 전환
+                if event.key == pygame.K_TAB or event.key == pygame.K_TAB: # F1키 또는 탭을 누르면 풀스크린 모드로 전환
                     screen = pygame.display.set_mode((screen_width, screen_height), pygame.FULLSCREEN)
                     # 풀스크린으로 바뀐 후 캐릭터를 중앙으로 재배치
-                    current_width, current_height = screen.get_size()
                     character_x_pos = (current_width / 2) - (character_width / 2)
                 if event.key == pygame.K_ESCAPE: # ESC키를 누르면 화면을 원래대로 전환
                     screen = pygame.display.set_mode((screen_width, screen_height))
