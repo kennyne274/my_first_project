@@ -81,7 +81,7 @@ def organize_files():
                     break
             
             # 카테고리에 없는 확장자는 기타 폴더로 이동
-            else:  # for-else 구문
+            else:  # for-else 구문으로 카테고리에 없으면 실행 유도
                 other = source / "others"
                 other.mkdir(exist_ok=True)
                 try:
