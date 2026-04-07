@@ -73,14 +73,14 @@ def organize_files():
                                     print(f"파일 이동 실패 {file.name}")
                                     skipped_count += 1
                                     
-                                break
+                                break  #  while True의 break
 
                             counter += 1
                
-                    break
+                    break 
             
             # 카테고리에 없는 확장자는 기타 폴더로 이동
-            else:  # for-else 구문
+            else:  # for-else 구문으로 카테고리에 확장자가 없으면 실행됨
                 other = source / "others"
                 other.mkdir(exist_ok=True)
                 try:
