@@ -1,6 +1,10 @@
 import shutil
 from pathlib import Path
 
+# 다운로드 폴더 정리기
+# 파일을 종류별로 나누어 분류합니다
+# 폴더 없으면 자동 생성.
+
 def get_downloads_folder() -> Path:
     """사용자의 다운로드 폴더 경로 반환"""
     home = Path.home()
@@ -17,7 +21,7 @@ def organize_files():
     categories = {
         'images': ['.jpg', '.jpeg', '.png', '.gif', '.webp'],
         'documents': ['.pdf', '.doc', '.docx', '.txt', '.xlsx', '.pptx', '.hwpx'],
-        'code' : ['.py', 'ipynb', '.c', '.html', '.css', '.js'],
+        'code' : ['.py', '.ipynb', '.c', '.html', '.css', '.js'],
         'videos': ['.mp4', '.avi', '.mkv', '.mov'],
         'music': ['.mp3', '.wav', '.flac'],
         'archives': ['.zip', '.rar', '.7z']
