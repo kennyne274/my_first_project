@@ -84,12 +84,15 @@ def organize_files():
             else:  # for-else 구문
                 other = source / "others"
                 other.mkdir(exist_ok=True)
-                shutil.move(file, other / file.name)
-                print(f"기타 폴더로 이동: {file.name}")
-                moved += 1
+                try:
+                    shutil.move(file, other / file.name)
+                    print(f"기타 폴더로 이동: {file.name}")
+                    moved += 1
+                except Exception:
+                    print(f"파일 이동 실패 {file.name}")
+                    skipped_count += 1
 
     print(f"\n총 {moved}개의 파일을 정리했습니다.")
 
 if __name__ == "__main__":
     organize_files()
-    
