@@ -15,7 +15,10 @@ def get_downloads_folder() -> Path:
     else:
         raise FileNotFoundError("다운로드 폴더를 찾을 수 없습니다.")
     
-def organize_files():  
+def organize_files(): 
+
+    moved = 0 # 이동한 파일수
+    skipped_count = 0 # 스킵한 파일수
 
     # 카테고리별 폴더 매핑
     categories = {
@@ -34,10 +37,6 @@ def organize_files():
     for category, exts in categories.items():
         folder = source / category
         folder.mkdir(exist_ok=True)
-
-
-    moved = 0
-    skipped_count = 0
 
     # 다운로드 폴더 내부 파일을 순회하며 분류 및 이동
     for file in source.iterdir():  
@@ -81,7 +80,7 @@ def organize_files():
                     break
             
             # 카테고리에 없는 확장자는 기타 폴더로 이동
-            else:  # for-else 구문으로 카테고리에 없으면 실행 유도
+            else:  # for-else 구문
                 other = source / "others"
                 other.mkdir(exist_ok=True)
                 try:
