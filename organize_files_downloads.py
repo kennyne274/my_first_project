@@ -1,9 +1,5 @@
 import shutil
-from pathlib import 
-
-# 다운로드 폴더 정리기
-# 파일 종류별로 자동 분류합니다.
-# 폴더 없으면 자동 생성
+from pathlib import Path
 
 def get_downloads_folder() -> Path:
     """사용자의 다운로드 폴더 경로 반환"""
@@ -70,14 +66,12 @@ def organize_files():
                                     shutil.move(file, new_file)                               
                                     print(f"{category}로 이동: {new_file.name}")
                                     moved += 1
-                                except shutil.Error:
+                                except Exception:
                                     print(f"파일 이동 실패 {file.name}")
                                     skipped_count += 1
-                                except PermissionError:
-                                    print(f"권한 오류, 이동 실패: {file.name}")
-                                    skipped_count += 1
+                                    
                                 break
-                            
+
                             counter += 1
                
                     break
@@ -94,3 +88,4 @@ def organize_files():
 
 if __name__ == "__main__":
     organize_files()
+    
