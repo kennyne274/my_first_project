@@ -92,7 +92,7 @@ def run_program(entry, log_box):
 # GUI 생성
 root = tk.Tk()
 root.title("파일 자동 정리 프로그램")
-root.geometry("600x500")
+root.geometry("600x480")
 
 # 폴더 선택
 frame = tk.Frame(root)
@@ -105,7 +105,7 @@ btn_select = tk.Button(frame, text="폴더 선택", command=lambda: select_folde
 btn_select.pack(side=tk.LEFT)
 
 # 실행 버튼
-btn_run = tk.Button(root, text="정리 시작", command=lambda: run_program(entry, log_box), pady=5, width=12)
+btn_run = tk.Button(root, text="파일 정리 시작", command=lambda: run_program(entry, log_box), padx=10, pady=7)
 btn_run.pack(pady=10)
 
 # 로그 출력
